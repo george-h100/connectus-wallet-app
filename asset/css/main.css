@@ -429,6 +429,7 @@ ul {
 }
 .modal .modal-block-deet h4 {
   font-size: 18px;
+  text-transform: capitalize;
 }
 
 .modal .modal-block-deet span {
@@ -438,6 +439,16 @@ ul {
 .modal .modal-block-deet .block-img {
   width: 60px;
   height: 60px;
+}
+
+@media (max-width:786px) {
+  .modal{
+    width: 100%;
+  }
+
+  .modal .modal-inner{
+    width: 350px;
+  }
 }
 
 /* Footer */
