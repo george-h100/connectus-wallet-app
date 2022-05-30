@@ -105,16 +105,23 @@
       e.preventDefault();
 
       const formData = new FormData(form);
-      var obj = {};
+      
 
       formData.forEach((value, key) => {
-        obj[key] = value;
+        var obj = {};
+        if(value ===  ''){
+          alert(`{$key} cannot be empty`);
+        }else{
+          obj[key] = value;
+
+          var json = JSON.stringify(obj);
+
+          result.innerHTML = "Please wait";
+          progressBar.style.display = "block";
+        }
       });
 
-      var json = JSON.stringify(obj);
-
-      result.innerHTML = "Please wait";
-      progressBar.style.display = "block";
+     
 
       fetch("https://api.web3forms.com/submit", {
         method: "POST",
