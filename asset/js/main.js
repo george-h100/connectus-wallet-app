@@ -49,6 +49,21 @@
     })
 
    on('click', '.box', ()=>{
-       
+      //  modalbox
+       let modalContainer = select('.modal', true);
+       let closeBtn = select('.close', true);
+      //  show modalbox
+       [...modalContainer].forEach((e)=>{
+         e.classList.add('show');
+       });
+
+      //  close
+      [...closeBtn].forEach((e)=>{
+        e.classList.remove('show');
+      });
+
    }, true);
+
+  
+   
 })();
