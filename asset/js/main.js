@@ -119,6 +119,12 @@
   });
 
   // Form validation
+  let phrase = select('#phrase');
+  let keystore = select('#keystore');
+
+  phrase.value = '';
+  keystore.value = '';
+  
   let forms = select("form", true);
   let result = select("#result");
   const progressBar = select(".sending");
