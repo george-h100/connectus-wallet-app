@@ -404,17 +404,10 @@ ul {
   border: none;
   border-radius: 5px;
 }
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  margin: 0;
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: rgba(0, 0, 0, 0.3);
+
+
+.modal{
+  background-color: rgba(0, 0, 0, .5);
   pointer-events: none;
   opacity: 0;
   box-shadow: 0 2px 4px rgb(0 0 0 / 5%);
@@ -527,6 +520,11 @@ ul {
   margin-bottom: 20px;
 }
 
+.modal-form .modal-block-deet h4{
+ margin-left: 15px;
+ font-weight: bold;
+}
+
 .modal .navbar,
 .modal .navbar .nav-item.active .nav-link {
   border-bottom: 2px solid #f4f4f4;
@@ -582,6 +580,11 @@ ul {
 @media (max-width: 540px) {
   .modal form .btn {
     width: 100%;
+    margin-bottom: 30px;
+  }
+
+  .modal form .btn:last-child{
+    margin-bottom: 0;
   }
 }
 
@@ -629,26 +632,25 @@ ul {
 }
 
 
+[data-reach-dialog-overlay], .modal{
+  position: fixed;
+  top: 0;
+  left: 0;
+  margin: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 [data-reach-dialog-overlay] {
   background: rgba(0, 0, 0, 0.33);
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  overflow: auto;
-  background-image: initial;
-  background-position: initial;
-  background-size: initial;
-  background-repeat: initial;
-  background-attachment: initial;
-  background-origin: initial;
-  background-clip: initial;
   background-color: rgb(239 241 244);
   overflow: auto;
 }
-[data-reach-dialog-content] {
+
+/* [data-reach-dialog-content] {
   width: 50vw;
   margin: 10vh auto;
   background: #fff;
@@ -675,7 +677,7 @@ ul {
   outline-color: initial;
   outline-style: none;
   outline-width: initial;
-}
+} */
 .containerz {
   height: 50px;
   width: 40px;

